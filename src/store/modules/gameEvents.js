@@ -7,7 +7,13 @@ const state = {
         startGame: false,
         pauseGame: false,
         blockBrowserBackAndFowards: 'INACTIVE',
-        devMenu: false
+        devMenu: false,
+        autoSkillcheckMode: 'off', // off | great | good | randomNoMiss
+        autoSkillcheckStats: {
+            great: 0,
+            good: 0,
+            miss: 0
+        }
     },
     buttons: {
         startGameButton: true,
@@ -30,5 +36,6 @@ const mutations = {
 }
 
 export default {
-    state, mutations
+    state,
+    mutations
 }

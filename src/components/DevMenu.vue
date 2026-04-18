@@ -10,12 +10,27 @@
         <div class="dev-card">
           <h3>Bloodpoints</h3>
           <div class="dev-row">
-            <input v-model.number="bpAmount" type="number" min="0" />
+            <input v-model.number="bpAmount" type="number" />
             <button @click="addBloodpoints">Add</button>
           </div>
           <div class="dev-row">
-            <input v-model.number="setBpAmount" type="number" min="0" />
+            <input v-model.number="setBpAmount" type="number" />
             <button @click="setBloodpoints">Set Exact</button>
+          </div>
+        </div>
+
+        <div class="dev-card">
+          <h3>Auto Skill Check</h3>
+          <div class="dev-row">
+            <select v-model="$store.state.gameEvents.events.autoSkillcheckMode">
+              <option value="off">Off</option>
+              <option value="great">Always Great</option>
+              <option value="good">Always Good</option>
+              <option value="randomNoMiss">Random (No Miss)</option>
+            </select>
+          </div>
+          <div class="dev-row">
+            <button @click="resetAutoSkillcheckStats">Reset Auto Counters</button>
           </div>
         </div>
 
@@ -63,6 +78,7 @@
           <p>Generators left: {{ generatorsLeft }}</p>
           <p>Bloodpoints: {{ bloodpoints }}</p>
           <p>Controller: {{ controllerStatus }}</p>
+          <p>Auto Mode: {{ autoSkillcheckMode }}</p>
         </div>
       </div>
     </div>
@@ -89,6 +105,9 @@ export default {
   computed: {
     visible() {
       return this.$store.state.gameEvents.events.devMenu
+    },
+    autoSkillcheckMode() {
+      return this.$store.state.gameEvents.events.autoSkillcheckMode
     },
     selectedList() {
       const source = this.selectedPool === 'toolbox' ? toolboxes : toolboxAddOns
@@ -126,6 +145,14 @@ export default {
     }
   },
   methods: {
+    resetAutoSkillcheckStats() {
+      this.$store.state.gameEvents.events.autoSkillcheckStats = {
+        great: 0,
+        good: 0,
+        miss: 0
+      }
+      notification('Auto skill check counters reset')
+    },
     toggleMenu() {
       this.$store.state.gameEvents.events.devMenu = !this.$store.state.gameEvents.events.devMenu
     },
@@ -135,13 +162,14 @@ export default {
     },
     addBloodpoints() {
       const amount = Number(this.bpAmount) || 0
-      this.$store.state.playerStats.stats.bloodpoints += amount
-      notification(`Added ${amount} bloodpoints`)
+      const next = this.$store.state.playerStats.stats.bloodpoints + amount
+      this.$store.state.playerStats.stats.bloodpoints = Math.max(-1000, next)
+      notification(`Adjusted bloodpoints by ${amount}`)
     },
     setBloodpoints() {
-      const amount = Math.max(0, Number(this.setBpAmount) || 0)
-      this.$store.state.playerStats.stats.bloodpoints = amount
-      notification(`Set bloodpoints to ${amount}`)
+      const amount = Number(this.setBpAmount) || 0
+      this.$store.state.playerStats.stats.bloodpoints = Math.max(-1000, amount)
+      notification(`Set bloodpoints to ${this.$store.state.playerStats.stats.bloodpoints}`)
     },
     snapshotInventory() {
       this.inventoryUndoStack.push(JSON.parse(JSON.stringify(this.$store.state.playerItems.inventory)))
@@ -217,6 +245,7 @@ export default {
       })
 
       this.resetLatestGame()
+      this.resetAutoSkillcheckStats()
       notification('All stats reset')
     }
   }
