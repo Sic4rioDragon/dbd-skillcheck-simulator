@@ -1,5 +1,7 @@
 module.exports = {
-    chainWebpack: config => {
-        config.module.rules.delete('eslint');
-    }
-}
+  publicPath: '/',
+
+  chainWebpack: config => {
+    config.module.rules.delete('eslint');
+  }
+};
