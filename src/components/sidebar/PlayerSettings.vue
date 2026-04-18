@@ -38,13 +38,66 @@
                     @blur="resetInput()"
                     type="number">
         </div>
+        <h1 class="s-title">Controller</h1>
+        <hr>
 
+        <div class="s-template s-keyboard">
+            <h2 class="s-left s-text">controller support</h2>
+            <span class="border-line"></span>
+            <input
+                @blur="resetInput()"
+                :placeholder="controllerEnabledText"
+                @click="toggleController()"
+                class="s-right"
+                type="text">
+        </div>
+
+        <div class="s-template s-keyboard">
+            <h2 class="s-left s-text">controller status</h2>
+            <span class="border-line"></span>
+            <input
+                disabled
+                :placeholder="controllerStatusText"
+                class="s-right"
+                type="text">
+        </div>
         <h1 class="s-title">Backgrounds</h1>
-        <hr>            
+        <hr>
+        <div class="s-template s-keyboard">
+    <h2 class="s-left s-text">use color background</h2>
+    <span class="border-line"></span>
+    <input
+        @blur="resetInput()"
+        :placeholder="backgroundColorModeText"
+        @click="toggleBackgroundColorMode()"
+        class="s-right"
+        type="text">
+</div>
+
+<div class="s-template s-keyboard">
+    <h2 class="s-left s-text">background color</h2>
+    <span class="border-line"></span>
+    <input
+        class="s-right color-input"
+        type="color"
+        :value="backgroundColor"
+        @input="setBackgroundColor($event)">
+</div>
+
+<div class="s-template s-keyboard">
+    <h2 class="s-left s-text">custom background</h2>
+    <span class="border-line"></span>
+    <input
+        class="s-right file-input"
+        type="file"
+        accept="image/*"
+        @change="setCustomBackground($event)">
+</div>            
             <agile @after-change="showCurrentSlide($event)" :dots='false' :centerMode='true' :initialSlide='getSlide' class="allImg" ref="carousel">
                 <img class="prevImg" v-for="(img, indx) in backgrounds" :key="indx" :src="img">
             </agile>
     </div>
+    
 </template>
 
 <script>
@@ -159,7 +212,41 @@ export default {
                     return i
                 }
             }
+        },
+        toggleController(){
+        this.$store.state.playerSettings.controller.enabled =
+            !this.$store.state.playerSettings.controller.enabled
+    },
+
+    toggleBackgroundColorMode(){
+        this.$store.state.playerSettings.useCustomBackgroundColor =
+            !this.$store.state.playerSettings.useCustomBackgroundColor
+    },
+
+    setBackgroundColor(e){
+        this.$store.state.playerSettings.backgroundColor = e.target.value
+    },
+
+    setCustomBackground(e){
+    const file = e.target.files && e.target.files[0]
+        if (!file) return
+
+        const maxSize = 2 * 1024 * 1024
+        if (file.size > maxSize) {
+            alert('Image is too large. Please use one under 2 MB.')
+            e.target.value = ''
+            return
         }
+
+        const reader = new FileReader()
+
+        reader.onload = (loadEvent) => {
+            this.$store.state.playerSettings.backgroundURL = loadEvent.target.result
+            this.$store.state.playerSettings.useCustomBackgroundColor = false
+        }
+
+        reader.readAsDataURL(file)
+    }
     },
     computed: {
         get_keyboard(){
@@ -183,8 +270,30 @@ export default {
         // eslint-disable-next-line vue/return-in-computed-property
         getSlide(){
             return this.gSlide()
-        }
+        },
+        controller(){
+        return this.$store.state.playerSettings.controller
+    },
+    controllerEnabledText(){
+        return this.controller.enabled ? 'ACTIVE' : 'INACTIVE'
+    },
+    controllerStatusText(){
+        if (!this.controller.enabled) return 'DISABLED'
+        if (!this.controller.connected) return 'NOT DETECTED'
+
+        if (this.controller.type === 'xbox') return 'CONNECTED - XBOX'
+        if (this.controller.type === 'playstation') return 'CONNECTED - PLAYSTATION'
+
+        return 'CONNECTED'
+    },
+    backgroundColor(){
+        return this.$store.state.playerSettings.backgroundColor
+    },
+    backgroundColorModeText(){
+        return this.$store.state.playerSettings.useCustomBackgroundColor ? 'ACTIVE' : 'INACTIVE'
     }
+    },
+    
 }
 </script>
 
@@ -197,6 +306,15 @@ export default {
     transform: translateY(-50%);
 }
 
+.color-input{
+    padding: 0;
+    height: 2.2rem;
+}
+
+.file-input{
+    font-size: 0.8rem;
+    line-height: 2rem;
+}
 
 .prevImg{
     /* position: relative; */

@@ -133,5 +133,3 @@ Also related:
 ## License
 
 MIT
-
-````

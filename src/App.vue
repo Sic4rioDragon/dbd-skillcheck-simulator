@@ -1,6 +1,12 @@
 <template>
   <div oncontextmenu="return false;" id="app">
-    <div :style="{ backgroundImage: 'url(' + image + ')' }" class="background">
+    <div
+    :style="{
+        backgroundImage: image ? 'url(' + image + ')' : 'none',
+        backgroundColor: backgroundColor
+    }"
+    class="background"
+    >
     </div>
     <Skillcheck/>
     <GeneralStats/>
@@ -38,7 +44,9 @@ import ActiveKillerPerks from './components/ActiveKillerPerks.vue'
 
 // eslint-disable-next-line no-unused-vars
 import * as events from '@/js/events/keyboardEvents.js'
+import * as gamepadEvents from '@/js/events/gamepadEvents.js'
 
+import {savePlayerSettings} from '@/js/playerSettingsStorage.js'
 
 export default {
   name: 'app',
@@ -57,9 +65,36 @@ export default {
     LeftBottom
   },
   computed: {
-      image(){
-          return this.$store.state.playerSettings.backgroundURL
-      }
+    image(){
+        return this.$store.state.playerSettings.useCustomBackgroundColor
+            ? ''
+            : this.$store.state.playerSettings.backgroundURL
+    },
+    backgroundColor(){
+        return this.$store.state.playerSettings.backgroundColor
+    }
+}
+}
+
+export default {
+  name: 'App',
+  computed: {
+    image(){
+      return this.$store.state.playerSettings.useCustomBackgroundColor
+        ? ''
+        : this.$store.state.playerSettings.backgroundURL
+    },
+    backgroundColor(){
+      return this.$store.state.playerSettings.backgroundColor
+    }
+  },
+  watch: {
+    '$store.state.playerSettings': {
+      handler(value){
+        savePlayerSettings(value)
+      },
+      deep: true
+    }
   }
 }
 </script>
@@ -100,11 +135,11 @@ body{
 
 .background{
     background: no-repeat center 20% fixed;
-    /* background-size: 100%; */
     position: fixed;
     top: 0;
     left: 0;
-    background-size: 100%;
+    background-size: cover;
+    background-color: #020202;
     width: 100%;
     height: 100%;
     z-index: -1;
