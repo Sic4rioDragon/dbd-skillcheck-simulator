@@ -16,10 +16,6 @@
       <p class="about-version">
         This page runs version <strong>{{ manifest.version }}</strong>
       </p>
-
-      <p class="about-version-sub">
-        Fork baseline version: <strong>{{ manifest.forked_from_version }}</strong>
-      </p>
     </div>
 
     <h1 class="about-title">About This Fork</h1>
@@ -27,16 +23,12 @@
 
     <div class="about-block">
       <p>
-        This project is based on the original
-        <a :href="manifest.repository" target="_blank" rel="noopener noreferrer">
-          dbd-skillcheck-simulator
-        </a>
-        and is now maintained as this fork.
+        This project is based on the original simulator and is now maintained through this fork.
       </p>
 
       <p>
-        The goal is to keep it online again, improve it over time, and make it easier
-        for people to just open and play.
+        The goal is to keep it updated, improve it over time, and make it easy for people
+        to just open and play.
       </p>
     </div>
 
@@ -79,24 +71,23 @@ export default {
   data() {
     return {
       manifest: {
-        version: 'v1.0.0.1',
-        forked_from_version: 'v1.0.0.0',
-        repository: 'https://github.com/Sic4rioDragon/dbd-skillcheck-simulator',
+        version: 'v1.0.0.3',
         issues: 'https://github.com/Sic4rioDragon/dbd-skillcheck-simulator/issues'
       }
     }
   },
   async mounted() {
     try {
-      const response = await fetch('/manifest.json')
+      const response = await fetch('/manifest.json', { cache: 'no-store' })
       if (!response.ok) return
+
       const data = await response.json()
       this.manifest = {
         ...this.manifest,
         ...data
       }
     } catch (e) {
-      // fallback to defaults above
+      // keep fallback values
     }
   }
 }
@@ -128,8 +119,7 @@ export default {
   padding-left: 1.4rem;
 }
 
-.about-version,
-.about-version-sub {
+.about-version {
   color: #d8d8d8;
 }
 

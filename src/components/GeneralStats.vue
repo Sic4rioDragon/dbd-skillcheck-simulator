@@ -129,7 +129,9 @@ export default {
     grid-template-columns: 16rem 8rem;
 }
 
-.rank-bloodpoints, .rate-ds-skillchecks, .rate-normal-skillchecks{
+.rank-bloodpoints,
+.rate-ds-skillchecks,
+.rate-normal-skillchecks{
     width: 17.5vw;
     padding: 0px 1rem;
     border-radius: 4px;
@@ -142,6 +144,28 @@ export default {
 
 .rank-bloodpoints{
     background-color: var(--font-color-one)
+}
+
+.rate-normal-skillchecks{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 0.8rem;
+    align-items: start;
+    text-align: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 0.8rem;
+}
+
+.rate-ds-skillchecks{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 0.8rem;
+    align-items: start;
+    text-align: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 0.8rem;
 }
 
 .top-status-img {
@@ -230,6 +254,8 @@ export default {
     text-align: center;
     font-size: 2rem;
     color: #fff;
-    margin-bottom: 1rem;
+    margin-top: 0.6rem;
+    margin-bottom: 0;
+    white-space: nowrap;
 }
 </style>
