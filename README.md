@@ -1,8 +1,3 @@
-Yeah — here’s a more human version that still keeps the original README vibe and info, just cleaned up and updated for your fork.
-
-Your current README still points to the old dead site and has the “project on hold” section, so this version updates that while keeping the same general structure.  
-
-````md
 # Dead by Daylight Skillcheck Simulator
 Dead by Daylight Skillcheck Simulator - Train your skills.
 
