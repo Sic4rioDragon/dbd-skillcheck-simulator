@@ -1,24 +1,17 @@
-
-import {handleScore} from '@/js/needlePosition.js'
+import { handleScore } from '@/js/needlePosition.js'
 import store from '@/store/store.js'
 import * as event from '@/js/events/controlGameEvents.js'
-// import {notification} from '@/js/library/use'
 
-
-const checkKeyChar = (key) => {
+const getCharCode = (key) => {
+    if (!key || key.length !== 1) return null
     return key.toUpperCase().charCodeAt()
 }
 
-// hit a skillcheck "SPACE Default"
-
-
-// var arrayGP = navigator.getGamepads()
-
-// window.addEventListener("gamepadconnected", function(e) {
-//   console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
-//   e.gamepad.index, e.gamepad.id,
-//   e.gamepad.buttons.length, e.gamepad.axes.length);
-// });
+const isTypingTarget = (target) => {
+    if (!target) return false
+    const tag = target.tagName
+    return tag === 'INPUT' || tag === 'TEXTAREA' || target.isContentEditable
+}
 
 // mobile users
 document.addEventListener('touchstart', e => {
@@ -30,7 +23,6 @@ document.addEventListener('touchstart', e => {
 })
 
 document.addEventListener('mousedown', e => {
-
     if (e.target.className == 'background' && store.state.playerSettings.mouse.skillCheckKey == e.buttons) {
         if (store.state.gameEvents.events.startGame && !store.state.gameEvents.events.pauseGame) {
             handleScore()
@@ -38,31 +30,56 @@ document.addEventListener('mousedown', e => {
     }
 })
 
-document.addEventListener('keypress', key => {
-    // console.log(key)
-    if (checkKeyChar(key.key) == store.state.playerSettings.keyboard.skillCheckKey && store.state.gameEvents.events.startGame && !store.state.gameEvents.events.pauseGame) {
+document.addEventListener('keydown', e => {
+    if (e.key === 'F9') {
+        e.preventDefault()
+        store.state.gameEvents.events.devMenu = !store.state.gameEvents.events.devMenu
+        return
+    }
+
+    if (isTypingTarget(e.target)) {
+        return
+    }
+
+    if (e.key === 'Escape') {
+        if (store.state.gameEvents.events.startGame && !store.state.gameEvents.events.pauseGame) {
+            event.pauseGame()
+            return
+        }
+
+        if (store.state.gameEvents.events.pauseGame) {
+            event.resumeGame()
+            return
+        }
+    }
+
+    if (e.repeat) {
+        return
+    }
+
+    const code = getCharCode(e.key)
+
+    if (code == store.state.playerSettings.keyboard.skillCheckKey && store.state.gameEvents.events.startGame && !store.state.gameEvents.events.pauseGame) {
         handleScore()
     }
 
-    if (checkKeyChar(key.key) == store.state.playerSettings.keyboard.startKey && !store.state.gameEvents.events.startGame) {
+    if (code == store.state.playerSettings.keyboard.startKey && !store.state.gameEvents.events.startGame) {
         event.startGame()
     }
 
-    if (checkKeyChar(key.key) == store.state.playerSettings.keyboard.stopKey && store.state.gameEvents.events.startGame) {
+    if (code == store.state.playerSettings.keyboard.stopKey && store.state.gameEvents.events.startGame) {
         event.stopGame()
     }
 
-    if (checkKeyChar(key.key) == store.state.playerSettings.keyboard.pauseKey && !store.state.gameEvents.events.pauseGame) {
+    if (code == store.state.playerSettings.keyboard.pauseKey && !store.state.gameEvents.events.pauseGame) {
         event.pauseGame()
     }
 
-    if (checkKeyChar(key.key) == store.state.playerSettings.keyboard.resumeKey && store.state.gameEvents.events.pauseGame) {
+    if (code == store.state.playerSettings.keyboard.resumeKey && store.state.gameEvents.events.pauseGame) {
         event.resumeGame()
     }
 })
 
-// make sure to pause the generator if the user is not on the page and the generator is still running
 window.onblur = () => {
     event.pauseGame()
-    // console.log( "Blur pause!" )
 }

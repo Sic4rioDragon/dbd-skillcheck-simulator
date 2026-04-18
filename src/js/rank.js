@@ -31,40 +31,41 @@ const rank = () => {
 }
 
 
-const reverseOpacity = () =>{
+const reverseOpacity = () => {
+  store.state.gameStatus.rank.buttonArea.disableButton = true
 
-    // disable button while the animation is in the progress
-    // this will prevent the animation to the retriggered
-    store.state.gameStatus.rank.buttonArea.disableButton = true
-
-    anime.timeline({
-        easing: 'easeInOutQuad',
-        duration: 400,
-        loop: false,
-        begin(){
-            stopGame()
-        },
-        complete(){
-            // set display to 'none' when the reverse animation is done
-            store.state.gameStatus.rank.showRank = false
-        }      
-    }).add({
-        targets: dom.rank['rank-next'],
-        opacity: [1, 0],
-    }).add({
-        targets: dom.rank['rank-status'],
-        opacity: [1, 0],
-    }).add({
-        targets: dom.rank['rank-points'],
-        opacity: [1, 0]
-    }).add({
-        targets: dom.buttons['border'],
-        translateY: 0,
-        opacity: [0, 1],
-    })
+  anime.timeline({
+    easing: 'easeInOutQuad',
+    duration: 400,
+    loop: false,
+    begin() {
+      stopGame()
+    },
+    complete() {
+      store.state.gameStatus.rank.showRank = false
+      store.state.gameStatus.rank.buttonArea.showButton = false
+      store.state.gameStatus.rank.buttonArea.disableButton = true
+      store.state.gameStatus.rank.pipLevel = 0
+    }
+  }).add({
+    targets: dom.rank['rank-next'],
+    opacity: [1, 0],
+  }).add({
+    targets: dom.rank['rank-status'],
+    opacity: [1, 0],
+  }).add({
+    targets: dom.rank['rank-points'],
+    opacity: [1, 0]
+  }).add({
+    targets: dom.buttons['border'],
+    translateY: 0,
+    opacity: [0, 1],
+  })
 }
 
 const rankProgressAnim = (percent) =>{
+    store.state.gameStatus.rank.buttonArea.showButton = false
+    store.state.gameStatus.rank.buttonArea.disableButton = true
     stopGame()
 
     // remove display 'none' before starting the animation process

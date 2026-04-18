@@ -100,15 +100,18 @@ export default {
       }
   },
   methods: {
-      menuSwitchState(){
+      menuSwitchState() {
+    if (
+        this.$store.state.gameStatus.now.generatorStarted &&
+        !this.$store.state.gameStatus.now.generatorPaused &&
+        !this.$store.state.gameStatus.rank.showRank
+    ) {
+        notification('Pause the current game then try again')
+        return
+    }
 
-        if (this.$store.state.gameStatus.now.generatorStarted && !this.$store.state.gameStatus.now.generatorPaused) {
-            notification('Pause the current game then try again')
-            return
-        } else{
-            this.$store.state.gameEvents.events.menu = !this.$store.state.gameEvents.events.menu
-        }
-      }
+    this.$store.state.gameEvents.events.menu = !this.$store.state.gameEvents.events.menu
+    }
   },
 }
 </script>

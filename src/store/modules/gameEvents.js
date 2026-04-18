@@ -6,8 +6,8 @@ const state = {
         locked: false,
         startGame: false,
         pauseGame: false,
-        blockBrowserBackAndFowards: 'INACTIVE'
-
+        blockBrowserBackAndFowards: 'INACTIVE',
+        devMenu: false
     },
     buttons: {
         startGameButton: true,
