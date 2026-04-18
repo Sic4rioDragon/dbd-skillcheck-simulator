@@ -11,9 +11,11 @@
         <div ref="pip3" class="pip3"></div>
       </div>
     </div>
-    <div v-show="rank.buttonArea.showButton" style="opacity: 0;" ref="rank-next" class="rank-next">
-      <button :disabled="rank.buttonArea.disableButton" @click="continueBtn" class="resumeBtn2">Continue</button>
-    </div>
+    <div v-show="rank.buttonArea.showButton" ref="rank-next" class="rank-next">
+    <button :disabled="rank.buttonArea.disableButton" @click="continueBtn" class="resumeBtn2">
+    Play Again
+  </button>
+  </div>
   </div>
 </template>
 
@@ -51,14 +53,30 @@ export default {
   },
   methods: {
     continueBtn() {
-      this.$store.state.gameStatus.now.generatorsLeft = 2
-      this.$store.state.gameStatus.now.charges = 0
-      this.$store.state.gameStatus.now.generatorPaused = false
-      this.$store.state.gameStatus.now.generatorStoped = false
-      this.$store.state.gameStatus.now.generatorRunning = false
-      this.$store.state.gameStatus.now.generatorStarted = false
-      reverseOpacity()
-    }
+    this.$store.state.gameStatus.now.generatorsLeft = 2
+    this.$store.state.gameStatus.now.charges = 0
+    this.$store.state.gameStatus.now.generatorPaused = false
+    this.$store.state.gameStatus.now.generatorStoped = false
+    this.$store.state.gameStatus.now.generatorRunning = false
+    this.$store.state.gameStatus.now.generatorStarted = false
+    this.$store.state.gameEvents.events.menu = false
+    this.$store.state.gameEvents.events.pauseGame = false
+    this.$store.state.gameEvents.events.locked = false
+    reverseOpacity()
+  }
   }
 }
 </script>
+
+<style scoped>
+.rank-next {
+  position: fixed;
+  left: 50%;
+  bottom: 8vh;
+  top: auto;
+  transform: translateX(-50%);
+  z-index: 9999;
+  opacity: 1 !important;
+  pointer-events: auto;
+}
+</style>

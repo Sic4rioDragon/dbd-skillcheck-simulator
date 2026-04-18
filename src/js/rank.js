@@ -137,17 +137,12 @@ const rankProgressAnim = (percent) =>{
 
         if (c == s) {
             store.state.gameStatus.rank.buttonArea.showButton = true
+            store.state.gameStatus.rank.buttonArea.disableButton = false
 
-            anime({
-                targets: dom.rank['rank-next'],
-                opacity: [0, 1],
-                easing: 'easeInOutQuad',
-                duration: 1000,
-                loop: false,
-                complete(){
-                    store.state.gameStatus.rank.buttonArea.disableButton = false
-                }
-            })
+            if (dom.rank['rank-next']) {
+                dom.rank['rank-next'].style.opacity = 1
+            }
+
             return
         }
 
