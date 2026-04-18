@@ -36,6 +36,10 @@ const reverseOpacity = () => {
             if (dom.rank['rank-next']) {
                 dom.rank['rank-next'].style.opacity = 1
             }
+            if (dom.buttons['border']) {
+                dom.buttons['border'].style.opacity = 1
+                dom.buttons['border'].style.transform = 'translateY(0)'
+            }
         }
     }).add({
         targets: dom.rank['rank-status'],
@@ -117,15 +121,15 @@ const rankProgressAnim = (percent) => {
         }
 
         if (c == s) {
-            store.state.gameStatus.rank.buttonArea.showButton = true
-            store.state.gameStatus.rank.buttonArea.disableButton = false
+        store.state.gameStatus.rank.buttonArea.showButton = true
+        store.state.gameStatus.rank.buttonArea.disableButton = false
 
-            if (dom.rank['rank-next']) {
-                dom.rank['rank-next'].style.opacity = 1
-            }
-
-            return
+        if (dom.rank['rank-next']) {
+            dom.rank['rank-next'].style.opacity = 1
         }
+
+        return
+    }
 
         c += s - c > 25 ? 25 : s - c
         if (c <= 100 && c >= 0) {

@@ -3,6 +3,11 @@ import anime from 'animejs/lib/anime.es.js'
 import { dom } from '@/js/domElements'
 
 const pauseButtonAnimation = () => {
+    if (dom.buttons['pause']) {
+        dom.buttons['pause'].style.opacity = 1
+        dom.buttons['pause'].style.transform = 'translateY(0)'
+    }
+
     if (dom.buttons['resume']) {
         dom.buttons['resume'].style.opacity = 0
         dom.buttons['resume'].style.transform = 'translateX(75px)'
@@ -10,18 +15,18 @@ const pauseButtonAnimation = () => {
 
     anime.timeline({
         easing: 'easeInOutQuad',
-        duration: 500,
+        duration: 250,
         loop: false,
         begin() {
             store.commit('updateGameStatus', [
                 {
                     state: 'buttons',
-                    event: "resumeGameButton",
+                    event: 'resumeGameButton',
                     to: true
                 },
                 {
                     state: 'events',
-                    event: "locked",
+                    event: 'locked',
                     to: true
                 }
             ])
@@ -30,7 +35,7 @@ const pauseButtonAnimation = () => {
             store.commit('updateGameStatus', [
                 {
                     state: 'events',
-                    event: "locked",
+                    event: 'locked',
                     to: false
                 }
             ])
@@ -38,13 +43,13 @@ const pauseButtonAnimation = () => {
     })
     .add({
         targets: dom.buttons['pause'],
-        translateY: [25, -75],
+        translateY: [0, -25],
         opacity: [1, 0],
         complete() {
             store.commit('updateGameStatus', [
                 {
                     state: 'buttons',
-                    event: "pauseGameButton",
+                    event: 'pauseGameButton',
                     to: false
                 }
             ])
@@ -52,8 +57,8 @@ const pauseButtonAnimation = () => {
     }, 0)
     .add({
         targets: dom.buttons['resume'],
-        translateX: [75, 0],
-        opacity: [0, 1],
+        translateX: [25, 0],
+        opacity: [0, 1]
     }, 0)
 }
 
