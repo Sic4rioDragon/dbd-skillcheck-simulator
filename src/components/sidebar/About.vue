@@ -1,106 +1,139 @@
 <template>
-    <div>
-        <h1 class="s-title">About</h1>
-        <hr>
-        <p class="s-about">
-            Dead by Daylight Skillcheck Simulator.
-        </p>
+  <div class="about-page">
+    <h1 class="about-title">About</h1>
+    <hr>
 
-        <p class="s-about">
-            This project is made and maintained by <a class="creator" href="https://steamcommunity.com/id/tomb-tomb-virus/">wølf.py</a>.</p>
-        <p>
-            &copy;2020-2022.
-        </p>
-        <!-- <p class="s-about">
-            Killer perks that can be tested here. You can select TRAINING mode
-            in order to activate or dezactivate the following perks. Or you
-            can leave it to NORMAL mode, and the perks will randomly be
-            selected or not.
-        </p> -->
+    <div class="about-block">
+      <p>
+        Dead by Daylight Skillcheck Simulator.
+      </p>
 
-        <h1 class="s-title">Perks</h1>
-        <hr>
+      <p>
+        This fork brings the simulator back online, keeps it playable in the browser,
+        and adds improvements over time.
+      </p>
 
-        <p class="s-about">The Killer Perks can be activated/dezactivated using CUSTOM mode from the GAME MODE menu. Selecting CUSTOM mode, will activate the selected perks at the maximum tier or at the maximum number of tokens(Hex: Huntress Lullaby). There are 3 preset modes EASY MEDIUM and HARD</p>
+      <p class="about-version">
+        This page runs version <strong>{{ manifest.version }}</strong>
+      </p>
 
-        <h2 class="s-title">Killer Perks</h2>
-        <ul class="s-about-list">
-            <h3>Hex: Ruin - **Version 2.6.0** *(got nurfed in **Version 3.5.0**)*</h3>
-            <ul>
-                <li>  - Good Skill Checks result in 3/4/5 % regression on the Generator.</li>
-                <li>  - Great Skill Checks grant 0 % bonus progression on the Generator.</li>
-            </ul>
-            <h3>Hex: Huntress Lullaby</h3>
-            <ul>
-                <li>1 to 4 Tokens: Time between the Skill Check warning sound and the Skill Check becomes shorter.</li>
-                <li>5 Tokens: No Skill Check warning.</li>
-            </ul>
-            <h3>Unnerving Presence</h3>
-            <ul>
-                <li>Triggered Skill Checks' success zones are reduced by 40/50/60 %.</li>
-            </ul>
-            <h3>Oppression</h3>
-            <ul>
-                <li>A hard Skill Check is made after killer kicks a generator.</li>
-            </ul>
-        </ul>
-
-        <h2 class="s-title">Survivor perks</h2>
-         <ul class="s-about-list">
-             <h3>This is not happening</h3>
-             <ul>
-                 <li>Increase the great area when injured</li>
-             </ul>
-         </ul>
-
-        <h1 class="s-title">Items</h1>
-        <hr>
-        <p class="s-about">The Toolbox is an item that can be used to repair generators more quickly. Different Toolboxes have different uses and not all of them are good for both uses. Add-ons can be equipped to enhance their speed and durability. Toolboxes and add-ons can be bought with bloodpoints. You can gain bloodpoins fast by hitting great skillchecks multiple times. You can gain free Bloodpoints by finding the secret :)
-        </p>
-        
-        <h1 class="s-title">Future Updates</h1>
-        <hr>
-        <ul class="s-about-list">
-            <li>Add 'New Brand Tool' (Item)</li>
-            <li>Add 'Overcharge' Killer Perk</li>
-            <li>Wiggle Skill Check</li>
-            <li>Glyph mode</li>
-        </ul>
-        <h1 @click='gain()' class="s-title">
-            Bugs / Update Requests / Feedback
-        </h1>
-        <hr>
-        <ul class="s-about-list">
-            <li>You can add me on Steam: <a href="https://steamcommunity.com/id/tomb-tomb-virus/" @click="gain()" class="creator">wølf.py</a></li>
-        </ul>
+      <p class="about-version-sub">
+        Fork baseline version: <strong>{{ manifest.forked_from_version }}</strong>
+      </p>
     </div>
+
+    <h1 class="about-title">About This Fork</h1>
+    <hr>
+
+    <div class="about-block">
+      <p>
+        This project is based on the original
+        <a :href="manifest.repository" target="_blank" rel="noopener noreferrer">
+          dbd-skillcheck-simulator
+        </a>
+        and is now maintained as this fork.
+      </p>
+
+      <p>
+        The goal is to keep it online again, improve it over time, and make it easier
+        for people to just open and play.
+      </p>
+    </div>
+
+    <h1 class="about-title">Current Focus</h1>
+    <hr>
+
+    <div class="about-block">
+      <ul>
+        <li>better pause system</li>
+        <li>controller support</li>
+        <li>Merciless Storm</li>
+        <li>clear stats option</li>
+        <li>general polish and bug fixes</li>
+        <li>later: accounts, leaderboards, and server-side stat validation</li>
+      </ul>
+    </div>
+
+    <h1 class="about-title">Issues / Feedback</h1>
+    <hr>
+
+    <div class="about-block">
+      <p>
+        Found a bug or have an idea?
+      </p>
+
+      <p>
+        Please use the
+        <a :href="manifest.issues" target="_blank" rel="noopener noreferrer">
+          GitHub Issues page
+        </a>
+        for bug reports, feedback, and suggestions.
+      </p>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-            methods: {
-                gain(){
-                    this.$store.state.playerStats.stats.bloodpoints += 1000
-                }
-            },
+  name: 'About',
+  data() {
+    return {
+      manifest: {
+        version: 'v1.0.0.1',
+        forked_from_version: 'v1.0.0.0',
+        repository: 'https://github.com/Sic4rioDragon/dbd-skillcheck-simulator',
+        issues: 'https://github.com/Sic4rioDragon/dbd-skillcheck-simulator/issues'
+      }
+    }
+  },
+  async mounted() {
+    try {
+      const response = await fetch('/manifest.json')
+      if (!response.ok) return
+      const data = await response.json()
+      this.manifest = {
+        ...this.manifest,
+        ...data
+      }
+    } catch (e) {
+      // fallback to defaults above
+    }
+  }
 }
 </script>
 
-<style>
-
-.s-about{
-    font-size: .9vw;
+<style scoped>
+.about-page {
+  color: white;
 }
 
-.s-about-list{
-    margin: 0.4vw 0px;
-    font-size: .9vw;
-    margin-left: 1vw;
+.about-title {
+  text-align: center;
+  color: #cda8ff;
+  margin-top: 1rem;
 }
 
-.creator{
-    color: aqua;
-    cursor: pointer;
+.about-block {
+  margin: 1.2rem 0 2rem 0;
+  line-height: 1.5;
 }
 
+.about-block p,
+.about-block li {
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+}
+
+.about-block ul {
+  padding-left: 1.4rem;
+}
+
+.about-version,
+.about-version-sub {
+  color: #d8d8d8;
+}
+
+a {
+  color: #58e1ff;
+}
 </style>

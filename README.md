@@ -114,6 +114,16 @@ npm run serve
 
 Then open **localhost:8080** in your browser.
 
+## Versioning
+
+This fork uses its own simple version format stored in `public/manifest.json`.
+
+- `v1.0.0.0` = fork baseline / starting point from the original public version used for this fork
+- `v1.0.0.1` = next update
+- future uploads can continue as `v1.0.0.2`, `v1.0.0.3`, etc.
+
+The About page reads the current version from `manifest.json`, so updating that file updates the visible version in the site.
+
 ## Contribute
 
 Want to contribute? Great.

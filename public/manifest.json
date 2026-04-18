@@ -1,0 +1,9 @@
+{
+  "name": "DBD Skillcheck Simulator",
+  "short_name": "DBD Skillcheck",
+  "version": "v1.0.0.1",
+  "forked_from_version": "v1.0.0.0",
+  "website": "https://skillcheck.sic4riodragon.uk/",
+  "repository": "https://github.com/Sic4rioDragon/dbd-skillcheck-simulator",
+  "issues": "https://github.com/Sic4rioDragon/dbd-skillcheck-simulator/issues"
+}
