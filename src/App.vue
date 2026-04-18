@@ -1,26 +1,26 @@
 <template>
   <div oncontextmenu="return false;" id="app">
     <div
-    :style="{
+      :style="{
         backgroundImage: image ? 'url(' + image + ')' : 'none',
         backgroundColor: backgroundColor
-    }"
-    class="background"
-    >
-    </div>
-    <Skillcheck/>
-    <GeneralStats/>
-    <Generator/>
-    <Combo/>
-    <ObjectivePoints/>
-    <Sidebar/>
-    <Noise/>
-    <!-- <Particles/> -->
-    <UserInteractionButtons/>
-    <Notifications/>
-    <Rank/>
-    <ActiveKillerPerks/>
-    <LeftBottom/>
+      }"
+      class="background"
+    ></div>
+
+    <Skillcheck />
+    <GeneralStats />
+    <Generator />
+    <Combo />
+    <ObjectivePoints />
+    <Sidebar />
+    <Noise />
+    <UserInteractionButtons />
+    <Notifications />
+    <Rank />
+    <ActiveKillerPerks />
+    <LeftBottom />
+    <DevMenu />
   </div>
 </template>
 
@@ -35,16 +35,13 @@ import UserInteractionButtons from './components/UserInteractionButtons.vue'
 import Notifications from './components/Notifications.vue'
 import Rank from './components/Rank.vue'
 import LeftBottom from './components/LeftBottom.vue'
-
 import Sidebar from './views/Sidebar.vue'
 import ActiveKillerPerks from './components/ActiveKillerPerks.vue'
+import DevMenu from './components/DevMenu.vue'
 
-// eslint-disable-next-line no-unused-vars
+// keep these imports so global listeners initialize
 import * as events from '@/js/events/keyboardEvents.js'
-// eslint-disable-next-line no-unused-vars
 import * as gamepadEvents from '@/js/events/gamepadEvents.js'
-
-import { savePlayerSettings } from '@/js/playerSettingsStorage.js'
 
 export default {
   name: 'App',
@@ -60,7 +57,8 @@ export default {
     Notifications,
     Rank,
     ActiveKillerPerks,
-    LeftBottom
+    LeftBottom,
+    DevMenu
   },
   computed: {
     image() {
@@ -71,106 +69,97 @@ export default {
     backgroundColor() {
       return this.$store.state.playerSettings.backgroundColor
     }
-  },
-  watch: {
-    '$store.state.playerSettings': {
-      handler(value) {
-        savePlayerSettings(value)
-      },
-      deep: true
-    }
   }
 }
 </script>
 
 <style>
-
-body{
-    background-color: #020202;
-    font-family: 'Roboto', sans-serif;
-    color: white;
-    padding: 1rem 1.4rem;
+body {
+  background-color: #020202;
+  font-family: 'Roboto', sans-serif;
+  color: white;
+  padding: 1rem 1.4rem;
 }
 
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-:root{
-    font-size: 0.58vw;
-    --circle-height: 145px;
-    --circle-width: 145px;               
-    --skillcheck-bar-width: 14px;
-    --skillcheck-bar-height: 100px;
-    --skillcheck-bar-gradient: radial-gradient(#ff0000, hsla(0, 70%, 5%, 0.00), rgba(0, 0, 0, 0));
-    --skillcheck-button-padding: .1rem .6rem;
-    --skillcheck-button-borderRadius: 4px;
-    --skillcheck-button-border: 1.5px solid #ffffff;
-    --skillcheck-button-color: #ffffff;
-    --general-stats-color: #ffffff;
-    --font-color-one: #91e4c8;
-    --font-color-two: #a5acaa;
-    --texture-one: url('../src/assets/backgrounds/texture20.png');
-    --texture-two: url('../src/assets/backgrounds/texture15.png');
-    --texture-tree: url('../src/assets/backgrounds/texture2.png')
+:root {
+  font-size: 0.58vw;
+  --circle-height: 145px;
+  --circle-width: 145px;
+  --skillcheck-bar-width: 14px;
+  --skillcheck-bar-height: 100px;
+  --skillcheck-bar-gradient: radial-gradient(#ff0000, hsla(0, 70%, 5%, 0), rgba(0, 0, 0, 0));
+  --skillcheck-button-padding: 0.1rem 0.6rem;
+  --skillcheck-button-borderRadius: 4px;
+  --skillcheck-button-border: 1.5px solid #ffffff;
+  --skillcheck-button-color: #ffffff;
+  --general-stats-color: #ffffff;
+  --font-color-one: #91e4c8;
+  --font-color-two: #a5acaa;
+  --texture-one: url('../src/assets/backgrounds/texture20.png');
+  --texture-two: url('../src/assets/backgrounds/texture15.png');
+  --texture-tree: url('../src/assets/backgrounds/texture2.png');
 }
 
-.background{
-    background: no-repeat center 20% fixed;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background-size: cover;
-    background-color: #020202;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
+.background {
+  background: no-repeat center 20% fixed;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-size: cover;
+  background-color: #020202;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
 }
 
-.popper{
-    background: #383838;
-    border: none;
-    padding: 0.4rem;
-    box-shadow: none;
-    margin: 0px 4rem;
+.popper {
+  background: #383838;
+  border: none;
+  padding: 0.4rem;
+  box-shadow: none;
+  margin: 0px 4rem;
 }
 
-.p-item-name{
-    text-align: start;
-    font-size: 1.4vw;
-    color: #ffffff;
-    padding: .2rem 2rem; 
-    background: #9593f5;
-    width: 100%;
+.p-item-name {
+  text-align: start;
+  font-size: 1.4vw;
+  color: #ffffff;
+  padding: 0.2rem 2rem;
+  background: #9593f5;
+  width: 100%;
 }
 
-.p-item-true{
-    color: #6EF37B;
+.p-item-true {
+  color: #6ef37b;
 }
 
-.p-item-false{
-    color: #FF4D4D;
+.p-item-false {
+  color: #ff4d4d;
 }
 
-.p-item-description{
-    font-size: 1vw;
-    color: rgb(168, 102, 255);
-    text-align: start;
+.p-item-description {
+  font-size: 1vw;
+  color: rgb(168, 102, 255);
+  text-align: start;
 }
 
-.p-item-status{
-    margin: 1vw;
-    color: white;
-    text-align: start;
-    font-size: 1vw;
-    padding-left: 2rem;
-    list-style-type: circle;
+.p-item-status {
+  margin: 1vw;
+  color: white;
+  text-align: start;
+  font-size: 1vw;
+  padding-left: 2rem;
+  list-style-type: circle;
 }
 
-.p-item-note{
-    font-size: 1vw;
-    color: #e3d1b6;
+.p-item-note {
+  font-size: 1vw;
+  color: #e3d1b6;
 }
 </style>
