@@ -10,6 +10,7 @@ import {combo} from '@/js/combo.js'
 
 import {skillcheckSpawnCoordinates} from '@/js/drawSkillCheck.js'
 
+const clampBloodpoints = (value) => Math.max(-1000, value)
 
 const score = (status) => {
     playTrack(status)
@@ -28,12 +29,16 @@ const score = (status) => {
                 points: `+ ${points}`
             })
 
-            store.state.playerStats.stats.bloodpoints += points 
+            store.state.playerStats.stats.bloodpoints = clampBloodpoints(
+    store.state.playerStats.stats.bloodpoints + points
+) 
 
     }else{
         store.state.playerStats.stats.dsFailed += 1
         combo(false)
-        store.state.playerStats.stats.bloodpoints += gameOptions.dsFailed
+        store.state.playerStats.stats.bloodpoints = clampBloodpoints(
+    store.state.playerStats.stats.bloodpoints + gameOptions.dsFailed
+)
     }
 
     playerRateStatus(
@@ -85,7 +90,9 @@ const score = (status) => {
 
         // update player score
         store.state.playerStats.stats[`${status}Score`] += 1
-        store.state.playerStats.stats.bloodpoints += points
+        store.state.playerStats.stats.bloodpoints = clampBloodpoints(
+    store.state.playerStats.stats.bloodpoints + points
+)
 
         playerRateStatus(
                 ['greatScore', 'goodScore', 'failedScore'], 

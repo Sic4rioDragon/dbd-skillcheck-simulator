@@ -62,7 +62,10 @@ export default {
     methods:{
         buyItem(key, value){
             if (this.$store.state.playerStats.stats.bloodpoints >= value.bloodpoints) {
-                this.$store.state.playerStats.stats.bloodpoints -= value.bloodpoints
+                this.$store.state.playerStats.stats.bloodpoints = Math.max(
+    -1000,
+    this.$store.state.playerStats.stats.bloodpoints - value.bloodpoints
+)
                 if (this.$store.state.playerItems.inventory[key]) {
                     this.$store.state.playerItems.inventory[key].quantity += 1
                 } else {
