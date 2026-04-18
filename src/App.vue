@@ -39,17 +39,15 @@ import LeftBottom from './components/LeftBottom.vue'
 import Sidebar from './views/Sidebar.vue'
 import ActiveKillerPerks from './components/ActiveKillerPerks.vue'
 
-
-// import {playerOptions} from '@/js/status/options.js'
-
 // eslint-disable-next-line no-unused-vars
 import * as events from '@/js/events/keyboardEvents.js'
+// eslint-disable-next-line no-unused-vars
 import * as gamepadEvents from '@/js/events/gamepadEvents.js'
 
-import {savePlayerSettings} from '@/js/playerSettingsStorage.js'
+import { savePlayerSettings } from '@/js/playerSettingsStorage.js'
 
 export default {
-  name: 'app',
+  name: 'App',
   components: {
     Skillcheck,
     GeneralStats,
@@ -65,32 +63,18 @@ export default {
     LeftBottom
   },
   computed: {
-    image(){
-        return this.$store.state.playerSettings.useCustomBackgroundColor
-            ? ''
-            : this.$store.state.playerSettings.backgroundURL
-    },
-    backgroundColor(){
-        return this.$store.state.playerSettings.backgroundColor
-    }
-}
-}
-
-export default {
-  name: 'App',
-  computed: {
-    image(){
+    image() {
       return this.$store.state.playerSettings.useCustomBackgroundColor
         ? ''
         : this.$store.state.playerSettings.backgroundURL
     },
-    backgroundColor(){
+    backgroundColor() {
       return this.$store.state.playerSettings.backgroundColor
     }
   },
   watch: {
     '$store.state.playerSettings': {
-      handler(value){
+      handler(value) {
         savePlayerSettings(value)
       },
       deep: true
