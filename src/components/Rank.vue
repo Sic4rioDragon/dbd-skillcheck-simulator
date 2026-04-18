@@ -3,6 +3,7 @@
     <div style="opacity: 0;" ref="rank-points" class="rank-points">
       <h2>{{ checkPipLevel }}</h2>
     </div>
+
     <div style="opacity: 0;" ref="rank-status" class="rank-status">
       <div class="rank-bar">
         <div style="width:0%;" ref="rank-progress" class="rank-progress"></div>
@@ -11,11 +12,12 @@
         <div ref="pip3" class="pip3"></div>
       </div>
     </div>
+
     <div v-show="rank.buttonArea.showButton" ref="rank-next" class="rank-next">
-    <button :disabled="rank.buttonArea.disableButton" @click="continueBtn" class="resumeBtn2">
-    Play Again
-  </button>
-  </div>
+      <button :disabled="rank.buttonArea.disableButton" @click="continueBtn" class="resumeBtn2">
+        Play Again
+      </button>
+    </div>
   </div>
 </template>
 
@@ -53,17 +55,17 @@ export default {
   },
   methods: {
     continueBtn() {
-    this.$store.state.gameStatus.now.generatorsLeft = 2
-    this.$store.state.gameStatus.now.charges = 0
-    this.$store.state.gameStatus.now.generatorPaused = false
-    this.$store.state.gameStatus.now.generatorStoped = false
-    this.$store.state.gameStatus.now.generatorRunning = false
-    this.$store.state.gameStatus.now.generatorStarted = false
-    this.$store.state.gameEvents.events.menu = false
-    this.$store.state.gameEvents.events.pauseGame = false
-    this.$store.state.gameEvents.events.locked = false
-    reverseOpacity()
-  }
+      this.$store.state.gameStatus.now.generatorsLeft = 2
+      this.$store.state.gameStatus.now.charges = 0
+      this.$store.state.gameStatus.now.generatorPaused = false
+      this.$store.state.gameStatus.now.generatorStoped = false
+      this.$store.state.gameStatus.now.generatorRunning = false
+      this.$store.state.gameStatus.now.generatorStarted = false
+      this.$store.state.gameEvents.events.menu = false
+      this.$store.state.gameEvents.events.pauseGame = false
+      this.$store.state.gameEvents.events.locked = false
+      reverseOpacity()
+    }
   }
 }
 </script>
