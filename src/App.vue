@@ -21,6 +21,7 @@
     <ActiveKillerPerks />
     <LeftBottom />
     <DevMenu />
+    <UpdateNotice />
   </div>
 </template>
 
@@ -43,10 +44,13 @@ import DevMenu from './components/DevMenu.vue'
 import * as events from '@/js/events/keyboardEvents.js'
 import * as gamepadEvents from '@/js/events/gamepadEvents.js'
 
+import UpdateNotice from './components/UpdateNotice.vue'
+
 export default {
   name: 'App',
   components: {
     Skillcheck,
+    UpdateNotice,
     GeneralStats,
     Generator,
     Combo,
@@ -61,15 +65,15 @@ export default {
     DevMenu
   },
   computed: {
-    image() {
-      return this.$store.state.playerSettings.useCustomBackgroundColor
-        ? ''
-        : this.$store.state.playerSettings.backgroundURL
-    },
-    backgroundColor() {
-      return this.$store.state.playerSettings.backgroundColor
-    }
+  image() {
+    return this.$store.state.playerSettings.useCustomBackgroundColor
+      ? ''
+      : this.$store.state.playerSettings.backgroundURL
+  },
+  backgroundColor() {
+    return this.$store.state.playerSettings.backgroundColor
   }
+}
 }
 </script>
 

@@ -71,14 +71,17 @@ export default {
   data() {
     return {
       manifest: {
-        version: 'v1.0.0.3',
+        version: 'v1.0.0.5',
         issues: 'https://github.com/Sic4rioDragon/dbd-skillcheck-simulator/issues'
       }
     }
   },
   async mounted() {
     try {
-      const response = await fetch('/manifest.json', { cache: 'no-store' })
+      const response = await fetch(`/manifest.json?t=${Date.now()}`, {
+        cache: 'no-store'
+      })
+
       if (!response.ok) return
 
       const data = await response.json()
