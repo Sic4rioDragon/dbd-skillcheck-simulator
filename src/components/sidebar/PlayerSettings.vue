@@ -222,6 +222,9 @@ export default {
             notification('While the input is active press the key you want to bind.')
         },
         showCurrentSlide(event) {
+            if (this.$store.state.playerSettings.useCustomBackgroundColor) {
+                return
+            }
             this.$store.state.playerSettings.backgroundURL = this.backgrounds[event.currentSlide]
         },
         gSlide() {
@@ -245,25 +248,40 @@ export default {
             this.$store.state.playerSettings.backgroundColor = e.target.value
         },
         setCustomBackground(e) {
-            const file = e.target.files && e.target.files[0]
-            if (!file) return
+        const file = e.target.files && e.target.files[0]
+        if (!file) return
 
-            const maxSize = 2 * 1024 * 1024
-            if (file.size > maxSize) {
-                alert('Image is too large. Please use one under 2 MB.')
-                e.target.value = ''
+        const maxSize = 2 * 1024 * 1024
+        if (file.size > maxSize) {
+            alert('Image is too large. Please use one under 2 MB.')
+            e.target.value = ''
+            return
+        }
+
+        const reader = new FileReader()
+
+        reader.onload = (loadEvent) => {
+            const result = loadEvent.target && loadEvent.target.result
+            if (!result) {
+                alert('Could not load image.')
                 return
             }
 
-            const reader = new FileReader()
+            this.$store.state.playerSettings.backgroundURL = result
+            this.$store.state.playerSettings.useCustomBackgroundColor = false
 
-            reader.onload = (loadEvent) => {
-                this.$store.state.playerSettings.backgroundURL = loadEvent.target.result
-                this.$store.state.playerSettings.useCustomBackgroundColor = false
-            }
-
-            reader.readAsDataURL(file)
+            // force carousel mismatch not to overwrite custom upload immediately
+            this.$nextTick(() => {
+                notification('Custom background applied')
+            })
         }
+
+        reader.onerror = () => {
+            alert('Failed to read image file.')
+        }
+
+        reader.readAsDataURL(file)
+    }
     },
     computed: {
         get_keyboard() {
